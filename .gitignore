@@ -1,0 +1,7 @@
+
+Unity/.vsconfig
+Unity/Library
+Unity/Temp
+*.sln
+*.dwlt
+Unity/Logs
