@@ -5,3 +5,6 @@ Unity/Temp
 *.sln
 *.dwlt
 Unity/Logs
+Unity/.vs
+Unity/obj
+*.csproj
