@@ -78,10 +78,18 @@ public class MPU6050 : MonoBehaviour
             //currentTime = DateTime.Now.Millisecond;            // Current time actual time read
             //elapsedTime = (currentTime - previousTime) / 1000;
             elapsedTime = 0.016f;
-            Debug.Log("elapsedTime:" + elapsedTime);
+            //Debug.Log("elapsedTime:" + elapsedTime);
             //ifReceive.text += msg+ "\r\n";
             MPUMSG mpumsg = new MPUMSG();
-            JsonUtility.FromJsonOverwrite(msg, mpumsg);
+            try
+            {
+                JsonUtility.FromJsonOverwrite(msg, mpumsg);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex);
+                return;
+            }
             if (mpumsg.Shoot == 1)
             {
                 fire = true;
@@ -90,7 +98,7 @@ public class MPU6050 : MonoBehaviour
             {
                 fire = false;
             }
-            Debug.Log("Temp:" + (mpumsg.Temp / 340.00 + 36.53));
+
             AccX = mpumsg.AccX / 16384.0f;
             AccY = mpumsg.AccY / 16384.0f;
             AccZ = mpumsg.AccZ / 16384.0f;
@@ -133,6 +141,7 @@ public class MPU6050 : MonoBehaviour
                     + " GyroErrorX:" + GyroErrorX
                     + " GyroErrorY:" + GyroErrorY
                     + " GyroErrorZ:" + GyroErrorZ);
+                Debug.LogWarning("Temp:" + (mpumsg.Temp / 340.00 + 36.53));
                 count = 0;
             }
 
@@ -143,7 +152,7 @@ public class MPU6050 : MonoBehaviour
             // Complementary filter - combine acceleromter and gyro angle values
             roll = 0.96f * gyroAngleX + 0.04f * accAngleX;
             pitch = 0.96f * gyroAngleY + 0.04f * accAngleY;
-            Debug.Log("yaw:" + yaw + " roll:" + roll + " pitch:" + pitch);
+            //Debug.Log("yaw:" + yaw + " roll:" + roll + " pitch:" + pitch);
             trans.eulerAngles = new Vector3(-roll, pitch, yaw);
         });
     }
