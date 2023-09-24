@@ -61,6 +61,7 @@ public class UdpServer : IDisposable
             else
             {
                 Debug.LogError("serverSocket == null");
+                EventCenter.Broadcast("Error", "serverSocket == null");
             }
         }
         catch (Exception e)
