@@ -118,7 +118,7 @@ MPU6050 mpu;
 // Also note that yaw/pitch/roll angles suffer from gimbal lock (for
 // more info, see: http://en.wikipedia.org/wiki/Gimbal_lock)
 #define OUTPUT_READABLE_YAWPITCHROLL
-
+//#define OUTPUT_READABLE_WORLDACCEL
 // uncomment "OUTPUT_READABLE_REALACCEL" if you want to see acceleration
 // components with gravity removed. This acceleration reference frame is
 // not compensated for orientation, so +X is always +X according to the
@@ -233,7 +233,7 @@ void setup() {
     Serial.println(mpu.testConnection() ? F("MPU6050 connection successful") : F("MPU6050 connection failed"));
 
     // wait for ready
-    //Serial.println(F("\nSend any character to begin DMP programming and demo: "));
+    Serial.println(F("\nSend any character to begin DMP programming and demo: "));
     //while (Serial.available() && Serial.read()); // empty buffer
     //while (!Serial.available());                 // wait for data
     //while (Serial.available() && Serial.read()); // empty buffer again
@@ -243,10 +243,10 @@ void setup() {
     devStatus = mpu.dmpInitialize();
 
     // supply your own gyro offsets here, scaled for min sensitivity
-    mpu.setXGyroOffset(220);
-    mpu.setYGyroOffset(76);
-    mpu.setZGyroOffset(-85);
-    mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
+    mpu.setXGyroOffset(53);
+    mpu.setYGyroOffset(112);
+    mpu.setZGyroOffset(-9);
+    mpu.setZAccelOffset(932); // 1688 factory default for my test chip
 
     // make sure it worked (returns 0 if so)
     if (devStatus == 0) {
@@ -432,6 +432,29 @@ void loop() {
             Serial.print(aaWorld.y);
             Serial.print("\t");
             Serial.println(aaWorld.z);
+
+            DynamicJsonDocument doc(2048);
+            // 创建json根节点对象
+            JsonObject obj  = doc.to<JsonObject>();
+            obj["y"] = aaWorld.x;
+            obj["p"] = aaWorld.y;
+            obj["r"] = aaWorld.z;
+            
+            //向udp工具发送消息
+            Udp.beginPacket(remoteIP, remoteUdpPort);//配置远端ip地址和端口
+
+            if (digitalRead(BTN_1) == 0)
+            {
+                obj ["f"] = 1; 
+            }
+            else
+            {
+                obj ["f"] = 0; 
+            }
+            String output;
+            serializeJson(doc, replyPacket);    
+            Udp.print(replyPacket);//把数据写入发送缓冲区
+            Udp.endPacket();//发送数据 
         #endif
     
         #ifdef OUTPUT_TEAPOT
