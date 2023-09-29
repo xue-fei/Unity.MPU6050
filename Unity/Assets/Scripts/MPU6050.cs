@@ -67,7 +67,8 @@ public class MPU6050 : MonoBehaviour
                 fire = false;
             }
 
-            trans.eulerAngles = new Vector3(-mpumsg.r, mpumsg.p, -mpumsg.y);
+            //trans.eulerAngles = new Vector3(mpumsg.p, -mpumsg.y, -mpumsg.r);
+            trans.eulerAngles = new Vector3(0, -mpumsg.y, 0);
         });
     }
 
