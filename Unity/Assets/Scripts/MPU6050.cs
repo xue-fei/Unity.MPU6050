@@ -8,7 +8,7 @@ public class MPU6050 : MonoBehaviour
 
     public Transform trans;
     private bool fire = false;
-    public float fireRate = 0.5f;
+    public float fireRate = 0.1f;
     private float nextFire = 0.0f;
     public GameObject sphere;
     public GunfireController controller;
@@ -38,7 +38,7 @@ public class MPU6050 : MonoBehaviour
             controller.FireWeapon();
             GameObject go = Instantiate(sphere, startPoint.position, trans.rotation);
             go.SetActive(true);
-            go.GetComponent<Rigidbody>().AddForce(trans.forward * 2000);
+            go.GetComponent<Rigidbody>().AddForce(trans.forward * 5000);
         }
     }
 

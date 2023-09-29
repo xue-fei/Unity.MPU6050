@@ -347,7 +347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trans: {fileID: 4516483270655256897}
-  fireRate: 0.5
+  fireRate: 0.1
   sphere: {fileID: 1154134496}
   controller: {fileID: 3883815052202406905}
   startPoint: {fileID: 768514859}
@@ -443,7 +443,7 @@ Transform:
   m_GameObject: {fileID: 1154134496}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 768514859}

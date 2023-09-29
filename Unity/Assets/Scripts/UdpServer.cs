@@ -67,7 +67,7 @@ public class UdpServer : IDisposable
         catch (Exception e)
         {
             Debug.LogError("接收消息出错");
-            Debug.LogException(e);
+            //Debug.LogException(e);
         }
     }
 
