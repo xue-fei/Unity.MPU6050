@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BigRookGames.Weapons;
+using System;
 using UnityEngine;
 
 public class MPU6050 : MonoBehaviour
@@ -10,6 +11,8 @@ public class MPU6050 : MonoBehaviour
     public float fireRate = 0.5f;
     private float nextFire = 0.0f;
     public GameObject sphere;
+    public GunfireController controller;
+    public Transform startPoint;
 
     // Start is called before the first frame update
     void Start()
@@ -32,9 +35,10 @@ public class MPU6050 : MonoBehaviour
         if (fire && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-            GameObject go = Instantiate(sphere, trans.position, trans.rotation);
+            controller.FireWeapon();
+            GameObject go = Instantiate(sphere, startPoint.position, trans.rotation);
             go.SetActive(true);
-            go.GetComponent<Rigidbody>().AddForce(trans.forward * 800);
+            go.GetComponent<Rigidbody>().AddForce(trans.forward * 2000);
         }
     }
 
