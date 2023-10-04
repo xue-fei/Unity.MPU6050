@@ -1,5 +1,6 @@
 ﻿using BigRookGames.Weapons;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MPU6050 : MonoBehaviour
@@ -14,6 +15,8 @@ public class MPU6050 : MonoBehaviour
     public GunfireController controller;
     public Transform startPoint;
 
+    public Queue<MPUMSG> mpuMsgs = new Queue<MPUMSG>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +29,7 @@ public class MPU6050 : MonoBehaviour
         server = new UdpServer();
         server.Start(16650, "192.168.0.56", 16651);
 
+        //向ESP8266发送本机IP
         server.Send("192.168.0.105");
     }
 
@@ -48,6 +52,7 @@ public class MPU6050 : MonoBehaviour
         server = null;
     }
 
+    Int64 count;
     void OnMessage(string msg)
     {
         Loom.QueueOnMainThread(() =>
@@ -62,17 +67,20 @@ public class MPU6050 : MonoBehaviour
                 Debug.LogError(ex);
                 return;
             }
-            if (mpumsg.f == 1)
+            count++;
+            if (count % 2 == 0)
             {
-                fire = true;
+                if (mpumsg.f == 1)
+                {
+                    fire = true;
+                }
+                else
+                {
+                    fire = false;
+                }
+                //trans.eulerAngles = new Vector3(mpumsg.p, -mpumsg.y, -mpumsg.r);
+                trans.eulerAngles = new Vector3(0, -mpumsg.y, 0);
             }
-            else
-            {
-                fire = false;
-            }
-
-            //trans.eulerAngles = new Vector3(mpumsg.p, -mpumsg.y, -mpumsg.r);
-            trans.eulerAngles = new Vector3(0, -mpumsg.y, 0);
         });
     }
 

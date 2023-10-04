@@ -70,7 +70,6 @@ bool btn1_state = false;
 WiFiUDP Udp;//实例化WiFiUDP对象
 unsigned int localUdpPort = 16651;  // 自定义本地监听端口
 unsigned int remoteUdpPort = 16650;  // 自定义远程监听端口
-#define remoteIP  "192.168.0.105"
 
 char replyPacket[2048];  //发送的消息,仅支持英文
 
@@ -381,7 +380,7 @@ void loop() {
             obj["r"] = ypr[2] * 180/M_PI;
             
             //向udp工具发送消息
-            Udp.beginPacket(remoteIP, remoteUdpPort);//配置远端ip地址和端口
+            Udp.beginPacket(Udp.remoteIP(), remoteUdpPort);//配置远端ip地址和端口
 
             if (digitalRead(BTN_1) == 0)
             {
