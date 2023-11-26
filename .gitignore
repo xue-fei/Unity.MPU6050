@@ -8,3 +8,4 @@ Unity/Logs
 Unity/.vs
 Unity/obj
 *.csproj
+Unity/ProjectSettings/boot.config
