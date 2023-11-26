@@ -17,10 +17,13 @@ public class MPU6050 : MonoBehaviour
 
     public Queue<MPUMSG> mpuMsgs = new Queue<MPUMSG>();
 
+    float nowTime;
+
     // Start is called before the first frame update
     void Start()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 30;
+        Screen.SetResolution(1920, 1080, true);
         Loom.Initialize();
 
         EventCenter.AddListener<string>("Receive", OnMessage);
@@ -31,6 +34,7 @@ public class MPU6050 : MonoBehaviour
 
         //向ESP8266发送本机IP
         server.Send("192.168.0.105");
+        nowTime = Time.time;
     }
 
     // Update is called once per frame
@@ -43,6 +47,12 @@ public class MPU6050 : MonoBehaviour
             GameObject go = Instantiate(sphere, startPoint.position, trans.rotation);
             go.SetActive(true);
             go.GetComponent<Rigidbody>().AddForce(trans.forward * 5000);
+        }
+
+        if(Time.time -3f > nowTime)
+        {
+            nowTime = Time.time;
+            Reset();
         }
     }
 
@@ -57,6 +67,7 @@ public class MPU6050 : MonoBehaviour
     {
         Loom.QueueOnMainThread(() =>
         {
+            nowTime = Time.time;
             MPUMSG mpumsg = new MPUMSG();
             try
             {
@@ -94,6 +105,14 @@ public class MPU6050 : MonoBehaviour
                 fire = false;
             }
         });
+    }
+
+    private void Reset()
+    {
+        trans.eulerAngles = Vector3.zero;
+        //向ESP8266发送本机IP
+        server.Send("192.168.0.105");
+        Debug.LogWarning("Reset");
     }
 }
 
