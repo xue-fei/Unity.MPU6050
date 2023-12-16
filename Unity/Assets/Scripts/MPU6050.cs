@@ -34,6 +34,7 @@ public class MPU6050 : MonoBehaviour
 
         //向ESP8266发送本机IP
         server.Send("192.168.0.105");
+        //server.Send("192.168.0.151");
         nowTime = Time.time;
     }
 
@@ -49,7 +50,7 @@ public class MPU6050 : MonoBehaviour
             go.GetComponent<Rigidbody>().AddForce(trans.forward * 5000);
         }
 
-        if(Time.time -3f > nowTime)
+        if (Time.time - 3f > nowTime)
         {
             nowTime = Time.time;
             Reset();
@@ -81,7 +82,7 @@ public class MPU6050 : MonoBehaviour
             count++;
             if (count % 2 == 0)
             {
-                if (mpumsg.f == 1)
+                if (mpumsg.Shoot == 1)
                 {
                     fire = true;
                 }
@@ -90,7 +91,8 @@ public class MPU6050 : MonoBehaviour
                     fire = false;
                 }
                 //trans.eulerAngles = new Vector3(mpumsg.p, -mpumsg.y, -mpumsg.r);
-                trans.eulerAngles = new Vector3(0, -mpumsg.y, 0);
+                //trans.eulerAngles = new Vector3(mpumsg.roll, -mpumsg.yaw, 0);
+                trans.rotation = Quaternion.Euler(mpumsg.roll, -mpumsg.yaw, 0);
             }
         });
     }
@@ -119,8 +121,8 @@ public class MPU6050 : MonoBehaviour
 [Serializable]
 public class MPUMSG
 {
-    public float y;
-    public float p;
-    public float r;
-    public int f;
+    public float yaw;
+    public float pitch;
+    public float roll;
+    public int Shoot;
 }
